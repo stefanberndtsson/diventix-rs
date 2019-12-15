@@ -31,7 +31,7 @@ pub enum InputSource {
 #[allow(non_camel_case_types,dead_code)]
 pub enum Action {
     OutputAdjust(Adjust),
-    OutputPlace(u16, u16, u16, u16),
+    OutputPlace(i32, i32, u16, u16),
     LayerSource(InputSource),
 }
 
@@ -65,10 +65,10 @@ fn adjust_output(layer: Layer, adj: Adjust) -> String {
     }
 }
 
-fn place_output(layer: Layer, (x, y, w, h): (u16, u16, u16, u16)) -> Vec<String> {
+fn place_output(layer: Layer, (x, y, w, h): (i32, i32, u16, u16)) -> Vec<String> {
     let mut place = Vec::new();
-    place.push(adjust_output(layer, Adjust::HPos(x+32768)));
-    place.push(adjust_output(layer, Adjust::VPos(y+32768)));
+    place.push(adjust_output(layer, Adjust::HPos((x+32768) as u16)));
+    place.push(adjust_output(layer, Adjust::VPos((y+32768) as u16)));
     place.push(adjust_output(layer, Adjust::HSize(w)));
     place.push(adjust_output(layer, Adjust::VSize(h)));
     place
