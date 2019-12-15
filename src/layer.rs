@@ -41,6 +41,7 @@ pub enum Adjust {
     VPos(u16),
     HSize(u16),
     VSize(u16),
+    Alpha(u8),
 }
 
 fn layer_type(layer: Layer) -> LayerType {
@@ -60,6 +61,7 @@ fn adjust_output(layer: Layer, adj: Adjust) -> String {
         Adjust::VPos(vp) => format!("1,{},{}pV", layer as u8, vp),
         Adjust::HSize(hs) => format!("1,{},{}pW", layer as u8, hs),
         Adjust::VSize(vs) => format!("1,{},{}pS", layer as u8, vs),
+        Adjust::Alpha(a) => format!("1,{},{}pA", layer as u8, a),
     }
 }
 
