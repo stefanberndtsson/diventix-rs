@@ -1,6 +1,16 @@
 YS1         ; CStore - Store
 TA0         ; Take not available
 
+; Disable Layer D
+TA0
+YS1
+IS1,4,0
+IN1,4,0
+pI1,4,0
+YS0
+TA1
+
+
 - Layer Adjust - H-Pos
 pH1,1,32769 ; Layer H-Pos. "next preset", "layer num", "position"
 pH1,1,32771

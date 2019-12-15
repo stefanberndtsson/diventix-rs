@@ -10,11 +10,16 @@ use std::env;
 fn main() {
     let mut cmd = cmd::Cmd::new()
         .preset(preset::Layout::PIP4_In)
+        .layer(layer::Layer::LayerA, layer::Action::LayerSource(layer::InputSource::Input(1)))
+        .layer(layer::Layer::LayerB, layer::Action::LayerSource(layer::InputSource::Input(2)))
+        .layer(layer::Layer::LayerD, layer::Action::LayerSource(layer::InputSource::Input(4)))
         .delay(2000)
         .layer(layer::Layer::LayerA, layer::Action::OutputAdjust(layer::Adjust::VSize(720))) 
         .layer(layer::Layer::LayerA, layer::Action::OutputAdjust(layer::Adjust::HSize(1920)))
         .delay(2000)
         .layer(layer::Layer::LayerB, layer::Action::OutputPlace(480, 0, 960, 540))
+        .delay(1000)
+        .layer(layer::Layer::LayerD, layer::Action::LayerSource(layer::InputSource::Input(1)))
         ;
     dbg!(&cmd);
     let mut conn = TcpStream::connect("10.17.42.161:10500").unwrap();

@@ -12,9 +12,27 @@ pub enum Layer {
 }
 
 #[allow(non_camel_case_types,dead_code)]
+#[derive(Clone,Copy)]
+pub enum LayerType {
+    Layer,
+    Background,
+    Logo,
+}
+
+#[allow(non_camel_case_types,dead_code)]
+#[derive(Clone,Copy)]
+pub enum InputSource {
+    None,
+    Input(u8),
+    Frame(u8),
+    Logo(u8),
+}
+
+#[allow(non_camel_case_types,dead_code)]
 pub enum Action {
     OutputAdjust(Adjust),
     OutputPlace(u16, u16, u16, u16),
+    LayerSource(InputSource),
 }
 
 #[allow(non_camel_case_types,dead_code)]
@@ -23,6 +41,17 @@ pub enum Adjust {
     VPos(u16),
     HSize(u16),
     VSize(u16),
+}
+
+fn layer_type(layer: Layer) -> LayerType {
+    match layer {
+        Layer::Background => LayerType::Background,
+        Layer::FrameMask => LayerType::Background,
+        Layer::LayerA | Layer::LayerB | Layer::LayerC | Layer::LayerD => {
+            LayerType::Layer
+        },
+        Layer::LogoA | Layer::LogoB => LayerType::Logo
+    }
 }
 
 fn adjust_output(layer: Layer, adj: Adjust) -> String {
@@ -43,9 +72,24 @@ fn place_output(layer: Layer, (x, y, w, h): (u16, u16, u16, u16)) -> Vec<String>
     place
 }
 
+fn layer_source(layer: Layer, source: InputSource) -> String {
+    let source_num = match source {
+        InputSource::None => 0,
+        InputSource::Frame(i) => i,
+        InputSource::Input(i) => i,
+        InputSource::Logo(i) => i,
+    };
+    match layer_type(layer) {
+        LayerType::Layer | LayerType::Background | LayerType::Logo => {
+            format!("1,{},{}IN", layer as u8, source_num)
+        }
+    }
+}
+
 pub fn layer(layer: Layer, action: Action) -> Vec<String> {
     match action {
         Action::OutputAdjust(adj) => vec![adjust_output(layer, adj)],
         Action::OutputPlace(x, y, w, h) => place_output(layer, (x, y, w, h)),
+        Action::LayerSource(src) => vec![layer_source(layer, src)],
     }
 }
