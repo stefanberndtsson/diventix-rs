@@ -13,6 +13,8 @@ fn main() {
         .delay(2000)
         .layer(layer::Layer::LayerA, layer::Action::OutputAdjust(layer::Adjust::VSize(720))) 
         .layer(layer::Layer::LayerA, layer::Action::OutputAdjust(layer::Adjust::HSize(1920)))
+        .delay(2000)
+        .layer(layer::Layer::LayerB, layer::Action::OutputPlace(480, 0, 960, 540))
         ;
     dbg!(&cmd);
     let mut conn = TcpStream::connect("10.17.42.161:10500").unwrap();

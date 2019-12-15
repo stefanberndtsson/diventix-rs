@@ -7,6 +7,6 @@ pub enum Layout {
     PIP3_Vert_2_1 = 4,
 }
 
-pub fn layout(layout: Layout) -> String {
-    String::from(format!("{}pL", layout as u8))
+pub fn layout(layout: Layout) -> Vec<String> {
+    vec![String::from(format!("{}pL", layout as u8))]
 }

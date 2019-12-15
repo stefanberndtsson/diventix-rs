@@ -1,4 +1,5 @@
 #[allow(non_camel_case_types,dead_code)]
+#[derive(Clone,Copy)]
 pub enum Layer {
     Background = 0,
     LayerA = 1,
@@ -13,6 +14,7 @@ pub enum Layer {
 #[allow(non_camel_case_types,dead_code)]
 pub enum Action {
     OutputAdjust(Adjust),
+    OutputPlace(u16, u16, u16, u16),
 }
 
 #[allow(non_camel_case_types,dead_code)]
@@ -32,8 +34,18 @@ fn adjust_output(layer: Layer, adj: Adjust) -> String {
     }
 }
 
-pub fn layer(layer: Layer, action: Action) -> String {
+fn place_output(layer: Layer, (x, y, w, h): (u16, u16, u16, u16)) -> Vec<String> {
+    let mut place = Vec::new();
+    place.push(adjust_output(layer, Adjust::HPos(x+32768)));
+    place.push(adjust_output(layer, Adjust::VPos(y+32768)));
+    place.push(adjust_output(layer, Adjust::HSize(w)));
+    place.push(adjust_output(layer, Adjust::VSize(h)));
+    place
+}
+
+pub fn layer(layer: Layer, action: Action) -> Vec<String> {
     match action {
-        Action::OutputAdjust(adj) => adjust_output(layer, adj),
+        Action::OutputAdjust(adj) => vec![adjust_output(layer, adj)],
+        Action::OutputPlace(x, y, w, h) => place_output(layer, (x, y, w, h)),
     }
 }

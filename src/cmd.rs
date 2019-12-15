@@ -35,12 +35,16 @@ impl Cmd {
     }
     
     pub fn preset(mut self, layout: preset::Layout) -> Self {
-        self.cmds.push(Command::DiVentix(preset::layout(layout)));
+        for cmd in preset::layout(layout).drain(..) {
+            self.cmds.push(Command::DiVentix(cmd));
+        }
         self
     }
 
     pub fn layer(mut self, layer: layer::Layer, action: layer::Action) -> Self {
-        self.cmds.push(Command::DiVentix(layer::layer(layer, action)));
+        for cmd in layer::layer(layer, action).drain(..) {
+            self.cmds.push(Command::DiVentix(cmd));
+        }
         self
     }
 
