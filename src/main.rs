@@ -1,6 +1,7 @@
 mod cmd;
 mod preset;
 mod layer;
+mod output;
 
 use std::io::prelude::*;
 use std::net::TcpStream;

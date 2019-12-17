@@ -1,5 +1,6 @@
 use crate::preset;
 use crate::layer;
+use crate::output;
 use std::io::prelude::*;
 use std::net::TcpStream;
 use std::{thread,time};
@@ -43,6 +44,13 @@ impl Cmd {
 
     pub fn layer(mut self, layer: layer::Layer, action: layer::Action) -> Self {
         for cmd in layer::layer(layer, action).drain(..) {
+            self.cmds.push(Command::DiVentix(cmd));
+        }
+        self
+    }
+
+    pub fn output(mut self, port: output::Port, action: output::Action) -> Self {
+        for cmd in output::output(port, action).drain(..) {
             self.cmds.push(Command::DiVentix(cmd));
         }
         self
